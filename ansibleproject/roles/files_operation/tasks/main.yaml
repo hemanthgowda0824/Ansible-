@@ -1,0 +1,83 @@
+---
+  - name: Load Variables from provided variable_file_path
+    include_vars: "{{ variable_file_path }}"
+
+  - name: "Create a directory"
+    file:
+      path: /tmp/directory-test
+      state: directory
+      mode: '0777'
+
+  - name: "Create a file"
+    file:
+      path: /tmp/directory-test/abc.txt
+      state: touch
+      mode: '0777'
+
+      #  - name: "Copy a file"
+      #    ansible.builtin.copy: 
+      # src: abc-copy.txt
+      #dest: /tmp/directory-test/abc-copy.txt  
+
+      #- name: "Copy a file devops-training.txt"
+      # ansible.builtin.copy:
+      #src: devops-training.txt
+      #dest: /tmp/directory-test/devops-training.txt
+
+  - name: "Copy a file in loop"
+    copy:
+      src: "{{item}}"
+      dest: /tmp/directory-test/{{item}}
+    with_items: "{{copy_files}}"
+
+  - name: "Copy a file devops-training.txt to delete"
+    ansible.builtin.copy:
+      src: devops-training.txt
+      dest: /tmp/directory-test/training-copy-todelete.txt
+
+  - name: "Create a file in loop"
+    file:
+      path: /tmp/directory-test/{{item}}.txt
+      state: touch
+      mode: '0644'
+    with_items: "{{file_names}}"
+
+  - name: "just execute a ls -lrt command"
+    shell: "cd /tmp/directory-test && ls -lrt"
+    register: "output"
+  - debug: var=output.stdout_lines
+
+  - name: "Delete a file"
+    file:
+      path: /tmp/directory-test/training-copy-todelete.txt
+      state: absent
+
+  - name: "Delete a file in loop"
+    file:
+      path: /tmp/directory-test/{{item}}.txt
+      state: absent
+    with_items: "{{file_names}}"
+      
+
+  - name: Copying file using j2
+    template:
+        src: "{{ item }}.j2"
+        dest: /tmp/directory-test/{{item}}
+        mode: 0777
+    loop :
+        - "house.sh"
+        - "nginx.conf"    
+    tags:
+      - create
+      - training
+      - yyy
+         
+  - name: "Use of variable"
+    shell: "echo {{foo}} {{ttt}} {{xyz}}"
+    register: tttt
+    vars:
+      foo: "INPLAY_VARIABLE"
+
+  - name: Print output
+    debug:
+      msg: "tttt: {{ tttt.stdout_lines }}"          

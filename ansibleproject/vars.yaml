@@ -1,0 +1,4 @@
+---
+foo: FROM_VARIABLE_FILE
+xyz: XYZ
+ttt: TTTT

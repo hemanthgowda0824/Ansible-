@@ -1,0 +1,15 @@
+---
+foo: "ANSIBLE TRAINING"
+ttt: "asdkjasdasd"
+xyz: "training"
+file_names:
+  - file1
+  - file2
+  - file3
+  - file4
+  - file5
+copy_files:
+  - abc-copy.txt
+  - devops-training.txt
+  - xyz.txt
+

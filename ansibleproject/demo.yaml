@@ -1,0 +1,8 @@
+---
+- hosts: ubuntu, aml 
+  become: yes
+  gather_facts: yes
+  become_method: sudo
+  roles:
+    - files_operation 
+    - apache

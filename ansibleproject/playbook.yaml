@@ -1,0 +1,25 @@
+---
+- name: "Playing with Ansible and Git"
+  hosts: localhost
+  connection: local
+  vars:
+    path: "/home/ubuntu"
+    package: "nginx"
+  tasks: 
+  - name: "just execute a ls -lrt command"
+    shell: "cd {{path}} && ls -lrt"
+    register: "output"
+  - debug: var=output.stdout_lines
+  - name: COPYFILE
+    copy: 
+      src: "{{path}}/a.txt"
+      dest: "{{path}}/zzz.txt"
+  - name: Creating file
+    file: 
+      dest: "{{ path }}/yyyy.txt"
+      state: touch      
+      mode: 0777
+  - name: Install nginx
+    apt: 
+      name: "{{ package }}"
+      state: latest      
